@@ -1,8 +1,29 @@
+```gitignore
+# Virtual Environment
 venv/
+.env/
+
+# Python cache
 __pycache__/
 *.pyc
-.session.sqlite
-session.sqlite
+*.pyo
+*.pyd
+
+# Pytest
 .pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+coverage.xml
+
+# Cosmic Ray
+session.sqlite
+
+# IDEs
 .idea/
 .vscode/
+
+# macOS
+.DS_Store
+```

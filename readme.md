@@ -2,6 +2,11 @@
 
 Este projeto demonstra como configurar e executar **mutation testing em Python** utilizando o framework **Cosmic Ray**, com foco em avaliar a **qualidade real dos testes automatizados**.
 
+Além disso, o projeto também utiliza **pytest-cov** para análise de:
+
+* cobertura de linhas (line coverage)
+* cobertura de branches/decisions (branch coverage)
+
 ---
 
 # 📦 Requisitos
@@ -28,7 +33,7 @@ venv\Scripts\activate     # Windows
 ## 2. Instalar dependências
 
 ```bash
-pip install pytest cosmic-ray
+pip install pytest pytest-cov cosmic-ray
 ```
 
 ---
@@ -74,7 +79,53 @@ PYTHONPATH=. pytest
 
 ---
 
-## 2. Inicializar sessão
+# 📊 Coverage (Line + Branch Coverage)
+
+## 1. Executar cobertura simples
+
+```bash
+PYTHONPATH=. pytest --cov=src
+```
+
+---
+
+## 2. Executar cobertura com branches/decisions
+
+```bash
+PYTHONPATH=. pytest --cov=src --cov-branch --cov-report=term-missing
+```
+
+---
+
+## 3. Gerar relatório HTML
+
+```bash
+PYTHONPATH=. pytest --cov=src --cov-branch --cov-report=html
+```
+
+Após a execução, abrir:
+
+```bash
+htmlcov/index.html
+```
+
+---
+
+# 🔍 Interpretação do Coverage
+
+| Métrica | Descrição                        |
+| ------- | -------------------------------- |
+| Stmts   | Quantidade de instruções         |
+| Miss    | Linhas não executadas            |
+| Branch  | Quantidade de branches/decisions |
+| BrPart  | Branches parcialmente cobertos   |
+| Cover   | Percentual de cobertura          |
+
+---
+
+# ☢️ Mutation Testing com Cosmic Ray
+
+## 1. Inicializar sessão
 
 ```bash
 cosmic-ray init cosmic-ray.conf session.sqlite
@@ -82,17 +133,21 @@ cosmic-ray init cosmic-ray.conf session.sqlite
 
 ---
 
-## 3. Executar mutações
+## 2. Executar mutações
 
 ```bash
 cosmic-ray exec cosmic-ray.conf session.sqlite
-ou
+```
+
+ou com logs mais detalhados:
+
+```bash
 cosmic-ray --verbosity INFO exec cosmic-ray.conf session.sqlite
 ```
 
 ---
 
-## 4. Gerar relatório
+## 3. Gerar relatório
 
 ```bash
 cr-report session.sqlite
@@ -100,7 +155,7 @@ cr-report session.sqlite
 
 ---
 
-## 🔍 Relatório detalhado
+## 4. Gerar relatório detalhado
 
 ```bash
 cr-report session.sqlite --show-diff --show-output --surviving-only
@@ -126,7 +181,7 @@ rm session.sqlite
 
 ---
 
-# 📊 Interpretação dos Resultados
+# 📊 Interpretação dos Resultados (Mutation Testing)
 
 | Métrica        | Descrição                        |
 | -------------- | -------------------------------- |
@@ -136,7 +191,17 @@ rm session.sqlite
 
 ---
 
-## 🎯 Regra prática
+# 🎯 Regra prática
+
+## Coverage
+
+* **< 60%** → Cobertura baixa
+* **60–80%** → Cobertura razoável
+* **> 80%** → Boa cobertura
+
+---
+
+## Mutation Testing
 
 * **< 60%** → Testes fracos
 * **60–80%** → Testes razoáveis
@@ -152,33 +217,50 @@ rm session.sqlite
 * Evitar incluir arquivos utilitários (ex: `report.py`)
 * Focar apenas no código de negócio
 * Utilizar casos de teste com cenários positivos e negativos
+* Validar edge cases e boundary values
+* Não confiar apenas em coverage; utilizar mutation testing em conjunto
 
 ---
 
 # 🧪 Exemplo completo de execução
 
+## Executar testes
+
 ```bash
-# Executar testes
 PYTHONPATH=. pytest
-
-# Inicializar sessão
-cosmic-ray init cosmic-ray.conf session.sqlite
-
-# Executar mutações
-cosmic-ray exec cosmic-ray.conf session.sqlite
-
-# Gerar relatório
-cr-report session.sqlite
 ```
 
 ---
 
-# 🚀 Próximos passos
+## Executar coverage com branches
 
-* Integrar com CI/CD (GitHub Actions)
-* Definir threshold mínimo de mutation score
-* Gerar relatórios automatizados
-* Aplicar mutation testing em APIs e pipelines de dados
+```bash
+PYTHONPATH=. pytest --cov=src --cov-branch --cov-report=term-missing
+```
+
+---
+
+## Inicializar sessão do Cosmic Ray
+
+```bash
+cosmic-ray init cosmic-ray.conf session.sqlite
+```
+
+---
+
+## Executar mutation testing
+
+```bash
+cosmic-ray exec cosmic-ray.conf session.sqlite
+```
+
+---
+
+## Gerar relatório
+
+```bash
+cr-report session.sqlite
+```
 
 ---
 
